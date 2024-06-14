@@ -1,6 +1,12 @@
 #include "sdl.h"
 #include "sound.h"
 
+SDL_Window *window;
+SDL_Renderer *renderer;
+SDL_Texture *texture;
+
+int32_t tex_pitch;
+
 void sdl_init() {
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 

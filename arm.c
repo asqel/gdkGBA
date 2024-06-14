@@ -6,6 +6,16 @@
 #include "io.h"
 #include "timer.h"
 
+
+arm_regs_t arm_r;
+ 
+uint32_t arm_op;
+uint32_t arm_pipe[2];
+uint32_t arm_cycles;
+
+bool int_halt;
+bool pipe_reload;
+
 /*
  * Utils
  */
@@ -1328,10 +1338,10 @@ typedef struct {
 } arm_memio_t;
 
 typedef enum {
-    BYTE  = 1,
-    HWORD = 2,
-    WORD  = 4,
-    DWORD = 8
+    BYTE_t  = 1,
+    HWORD_t = 2,
+    WORD_t  = 4,
+    DWORD_t = 8
 } arm_size_e;
 
 static uint32_t arm_memio_reg_get(uint8_t reg) {
@@ -1527,10 +1537,10 @@ static void arm_memio_load_usr(arm_memio_t op, arm_size_e size) {
     arm_mode_set(ARM_USR);
 
     switch (size) {
-        case BYTE:  arm_memio_ldrb(op); break;
-        case HWORD: arm_memio_ldrh(op); break;
-        case WORD:  arm_memio_ldr(op);  break;
-        case DWORD: arm_memio_ldrd(op); break;
+        case BYTE_t:  arm_memio_ldrb(op); break;
+        case HWORD_t: arm_memio_ldrh(op); break;
+        case WORD_t:  arm_memio_ldr(op);  break;
+        case DWORD_t: arm_memio_ldrd(op); break;
     }
 
     arm_mode_set(mode);
@@ -1542,21 +1552,21 @@ static void arm_memio_store_usr(arm_memio_t op, arm_size_e size) {
     arm_mode_set(ARM_USR);
 
     switch (size) {
-        case BYTE:  arm_memio_strb(op); break;
-        case HWORD: arm_memio_strh(op); break;
-        case WORD:  arm_memio_str(op);  break;
-        case DWORD: arm_memio_strd(op); break;
+        case BYTE_t:  arm_memio_strb(op); break;
+        case HWORD_t: arm_memio_strh(op); break;
+        case WORD_t:  arm_memio_str(op);  break;
+        case DWORD_t: arm_memio_strd(op); break;
     }
 
     arm_mode_set(mode);
 }
 
 static void arm_memio_ldrbt(arm_memio_t op) {
-    arm_memio_load_usr(op, BYTE);
+    arm_memio_load_usr(op, BYTE_t);
 }
 
 static void arm_memio_strbt(arm_memio_t op) {
-    arm_memio_store_usr(op, BYTE);
+    arm_memio_store_usr(op, BYTE_t);
 }
 
 static arm_memio_t arm_memio_mult_op() {

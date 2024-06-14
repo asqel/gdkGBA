@@ -1,0 +1,8 @@
+//olivine:exec
+
+//tcc !(search -e c) -o gba.elf -lm -lSDL2
+
+tcc /user/gdkGBA/arm.c      /user/gdkGBA/io.c    /user/gdkGBA/sound.c /user/gdkGBA/arm_mem.c  /user/gdkGBA/main.c  /user/gdkGBA/timer.c /user/gdkGBA/dma.c /user/gdkGBA/sdl.c   /user/gdkGBA/video.c -o gba.elf -lm -lSDL2
+
+cp gba.elf /bin/fatpath/
+debug -r

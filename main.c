@@ -22,6 +22,8 @@ static uint32_t to_pow2(uint32_t val) {
     return val + 1;
 }
 
+int FPS = 60;
+
 int main(int argc, char* argv[]) {
     printf("gdkGBA - Gameboy Advance emulator made by gdkchan\n");
     printf("This is FREE software released into the PUBLIC DOMAIN\n\n");
@@ -37,7 +39,7 @@ int main(int argc, char* argv[]) {
 
     FILE *image;
 
-    image = fopen("gba_bios.bin", "rb");
+    image = fopen("/zada/gba/gba_bios.bin", "rb");
 
     if (image == NULL) {
         printf("Error: GBA BIOS not found!\n");
@@ -80,7 +82,7 @@ int main(int argc, char* argv[]) {
         run_frame();
 
         SDL_Event event;
-
+        uint32_t t0 = SDL_GetTicks();
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
                 case SDL_KEYDOWN:
@@ -118,6 +120,10 @@ int main(int argc, char* argv[]) {
                 case SDL_QUIT: run = false; break;
             }
         }
+        uint32_t t1 = SDL_GetTicks();
+        if (t1 - t0 < (1.0 / FPS *1000)) {
+			usleep(((1.0 / FPS *1000) - (t1 - t0) + 10)*1000);
+		}
     }
 
     sdl_uninit();

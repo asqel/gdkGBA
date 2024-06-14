@@ -1,3 +1,5 @@
+#ifndef ARM_H
+#define ARM_H
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -100,14 +102,14 @@ typedef struct {
     uint32_t spsr_mon;
 } arm_regs_t;
 
-arm_regs_t arm_r;
+extern arm_regs_t arm_r;
+ 
+extern uint32_t arm_op;
+extern uint32_t arm_pipe[2];
+extern uint32_t arm_cycles;
 
-uint32_t arm_op;
-uint32_t arm_pipe[2];
-uint32_t arm_cycles;
-
-bool int_halt;
-bool pipe_reload;
+extern bool int_halt;
+extern bool pipe_reload;
 
 void arm_init();
 void arm_uninit();
@@ -119,3 +121,5 @@ void arm_int(uint32_t address, int8_t mode);
 void arm_check_irq();
 
 void arm_reset();
+
+#endif
